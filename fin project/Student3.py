@@ -17,24 +17,10 @@ class NewVisit:
         #upper parts : display crucial infomation
 
         #Labels: to the left of the window
-        idL = wd.LabelWidget(self.root, 0, 0, "ID")
-        dateL = wd.LabelWidget(self.root, 0, 1, "Visit Date")
-        startL = wd.LabelWidget(self.root, 0, 2, "Visit Start")
-        showL = wd.LabelWidget(self.root, 0, 3, "Show/No show")
-        topicL = wd.LabelWidget(self.root, 0, 4, "Topic")
+        idL = wd.LabelWidget(self.root, 0, 0, "'Picture'")
+        dateL = wd.LabelWidget(self.root, 0, 4, "Get Student Name")
+        startL = wd.LabelWidget(self.root, 1, 0, "Button for New")
 
-
-        #Entries: to the right of the window
-        idE = wd.EntryWidget(self.root, 1, 0, "ID")
-        dateE = wd.EntryWidget(self.root, 1, 1, "YYYY-MM-DD")
-        startE = wd.EntryWidget(self.root, 1, 2, "HH:MM")
-        #check button for the show
-        showVar = tk.StringVar()
-        showE = tk.Checkbutton(self.root, variable=showVar, onvalue="Yes", offvalue = "No")
-        showE.deselect() #set the check button to offvalue
-        showE.grid(column = 1, row=3)
-        TopicE = wd.EntryWidget(self.root, 1, 4, "Topic")
-        TopicE.config(width = 50)
 
 
         #lower part, display long text
@@ -45,30 +31,6 @@ class NewVisit:
         noteE.grid(columnspan = 2)
         oldNote = noteE.getVal() #store the old note for comparision later
 
-
-        #Student Comments
-        newComments = wd.LabelWidget(self.root, 0, 7, "Student comments")
-        newComments.config(width = 50)
-        newComments.grid(columnspan = 2)
-        comments = wd.TextWidget(self.root, 0, 8, 150, 10, "Insert Comments")
-        comments.grid(columnspan = 2)
-        oldComments = comments.getVal() #store the old note for comparision later
-
-        #observations
-        newObservations = wd.LabelWidget(self.root, 0, 9, "Observations")
-        newObservations.config(width = 50)
-        newObservations.grid(columnspan = 2)
-        observations = wd.TextWidget(self.root, 0, 10, 150, 10, "Insert Observations")
-        observations.grid(columnspan = 2)
-        oldObservations = observations.getVal() #store the old note for comparision later
-
-        #recommendations
-        newRecommendations = wd.LabelWidget(self.root, 0, 11, "Recommendations")
-        newRecommendations.config(width = 50)
-        newRecommendations.grid(columnspan = 2)
-        recommendations = wd.TextWidget(self.root, 0, 12, 150, 10, "Insert Recommendations")
-        recommendations.grid(columnspan = 2)
-        oldRecommendations = observations.getVal() #store the old note for comparision later
 
         #Log display to the gui
         log = wd.LabelWidget(self.root, 0, 14, "Status", 30)

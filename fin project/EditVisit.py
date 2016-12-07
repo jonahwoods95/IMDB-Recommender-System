@@ -1,12 +1,11 @@
 import Tkinter as tk
 import Database as DB
 import Widgets as wd
-import tkMessageBox
 
 class NewVisit:
     'App for creating a new student in the database'
     #################   CONSTRUCTOR   #################
-    def __init__(self, db, idInput = "", visit_dateInput = "", visit_startInput = ""):
+    def __init__(self, db):
         '''
         Initialize a gui for the insertion of students infomation'
         INPUT: db - the databse
@@ -18,9 +17,9 @@ class NewVisit:
         #Fletching data from the given infomation
 
         try:
-            keys = [idInput, visit_dateInput, visit_startInput]
+            keys = "hawkeye20", "2015-04-22", "14:22"
             data = db.findVisit(keys)[0]
-            stuName = ' '.join(db.findStudent(idInput)[0][1:3])
+            stuName = ' '.join(db.findStudent("hawkeye20")[0][1:3])
         except IndexError:
             data = ["N/A" for i in range(1, 10)]
             stuName = "N/A"
@@ -64,36 +63,36 @@ class NewVisit:
         #Visit NOTE
         noteL = wd.LabelWidget(self.root, 0, 5, "Visit Note")
         noteL.grid(columnspan=2)
-        noteE = wd.TextWidget(self.root, 0, 6, 150, 5, data[5])
+        noteE = wd.TextWidget(self.root, 0, 6, 150, 10, data[5])
         noteE.grid(columnspan = 2)
-        noteE.append(timeStamp + " -- ")
+        noteE.append("\n" + timeStamp + " -- ")
         oldNote = noteE.getVal() #store the old note for comparision later
 
         #Student Comments
         newComments = wd.LabelWidget(self.root, 0, 7, "Student comments")
         newComments.config(width = 50)
         newComments.grid(columnspan = 2)
-        comments = wd.TextWidget(self.root, 0, 8, 150, 5, data[6])
+        comments = wd.TextWidget(self.root, 0, 8, 150, 10, data[6])
         comments.grid(columnspan = 2)
-        comments.append(timeStamp + " -- ")
+        comments.append("\n" + timeStamp + " -- ")
         oldComments = comments.getVal() #store the comment note for comparision later
 
         #observations
         newObservations = wd.LabelWidget(self.root, 0, 9, "Observations")
         newObservations.config(width = 50)
         newObservations.grid(columnspan = 2)
-        observations = wd.TextWidget(self.root, 0, 10, 150, 5, data[7])
+        observations = wd.TextWidget(self.root, 0, 10, 150, 10, data[7])
         observations.grid(columnspan = 2)
-        observations.append(timeStamp + " -- ")
+        observations.append("\n" + timeStamp + " -- ")
         oldObservations = observations.getVal() #store the old note for comparision later
 
         #recommendations
         newRecommendations = wd.LabelWidget(self.root, 0, 11, "Recommendations")
         newRecommendations.config(width = 50)
         newRecommendations.grid(columnspan = 2)
-        recommendations = wd.TextWidget(self.root, 0, 12, 150, 5, data[8])
+        recommendations = wd.TextWidget(self.root, 0, 12, 150, 10, data[8])
         recommendations.grid(columnspan = 2)
-        recommendations.append(timeStamp + " -- ")
+        recommendations.append("\n" + timeStamp + " -- ")
         oldRecommendations = observations.getVal() #store the old note for comparision later
 
         #Log display to the gui
@@ -109,45 +108,25 @@ class NewVisit:
                 #interaction witht the Database object
 
                 #checking if there is any changes had been made?
-                dt = dateE.getVal()
-                sta = startE.getVal()
+                dt = False if data[1] == dateE.getVal() else dateE.getVal()
+                sta = False if data[2] == dateE.getVal() else startE.getVal()
 
                 nt = False if oldNote == noteE.getVal() else noteE.getVal()
                 comm = False if oldComments == comments.getVal() else comments.getVal()
                 obs = False if oldObservations == observations.getVal() else observations.getVal()
                 rec = False if oldRecommendations == observations.getVal() else recommendations.getVal()
 
-                db.updateVisit(keys, dt, sta, showVar.get(), topicE.getVal(), nt, comm, obs, rec)
+
+                #db.updateVisit(keys, data[0], dt, sta, showVar.get(), topicE.getVal(), nt, comm, obs, rec)
 
                 log.set("Update Success")
             except Exception, value:
                 #If insertion fail, report to the Log display
                 log.set(value)
 
-        def delete():
-            'Method to delete a visit'
-            try:
-                if tkMessageBox.askyesno("Warning", "Delete This Visit"):
-                    log.set("Delete Success")
-                    #wiping out displayed data
-                    ID.set("N/A")
-                    name.set("N/A")
-
-                    db.delVisit(keys[0], keys[1], keys[2])
-                else:
-                    log.set("Delete Canceled")
-            except Exception, value:
-                log.set(value)
-
-        #A Delete button
-        submit = tk.Button(self.root, text="Delete visit", command = delete)
-        submit.grid(column = 0, row=13)
-
         #A Submit button
         submit = tk.Button(self.root, text="Update", command = update)
-        submit.grid(column = 1, row=13)
-
-
+        submit.grid(column = 0, row=13, columnspan=2)
 
         #make the window appears
         self.root.mainloop()
@@ -157,4 +136,4 @@ class NewVisit:
 if __name__ == "__main__":
     #connecting with the database
     db = DB.Database('database/cup.db')
-    new = NewVisit(db, "charles17", "2016-06-02", "14:22")
+    new = NewVisit(db)

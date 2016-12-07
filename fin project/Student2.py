@@ -3,13 +3,12 @@ import ttk
 import Database as DB
 import Widgets as wd
 
-class GuiList:
+class Gui:
     #################   CONSTRUCTOR   #################
     def __init__(self):
 
         #create container
         self.root = tk.Tk()
-        self.root.title("Search results")
 
         ##set weight to the grid so that it can take up more space
         tk.Grid.rowconfigure(self.root, 0, weight=1)
@@ -18,7 +17,6 @@ class GuiList:
     def draw_table(self, db, r):
 
         list_columns = [a[1] for a in db.meta[r]]
-
         ###  TREEVIEW INITIALIZATION AND CONFIGURATIONS  ###
         #create a tree view
         self.tree = ttk.Treeview(self.root, selectmode='extended')
@@ -34,16 +32,20 @@ class GuiList:
         self.xsb.grid(row=1, column=0, sticky=tk.E + tk.W)
 
         ###  DATA  ###
-
+        columns=list_columns
         #index the column
-        self.tree["columns"] = list_columns
+        self.tree["columns"] = columns
 
         ## column name ##
-        #columb attributes
+        #row ndex
+        self.tree.column("#0", width=100, anchor=tk.W)
+        self.tree.heading("#0", text="No.")
+        #column attributes
+        self.tree["displaycolumns"] = list_columns[1:3] + list_columns[4:5]
         for i in list_columns:
             self.tree.column(i, minwidth=20)
             self.tree.heading(i, text=i)
-
+        
         ##Actual data
         data = db.fetchData(r)
         index = 1
@@ -57,7 +59,7 @@ class GuiList:
         self.root.mainloop()
 
 if __name__ == "__main__":
-    gui = GuiList()
+    gui = Gui()
 
     #connecting with the database
     db = DB.Database('database/cup.db')
